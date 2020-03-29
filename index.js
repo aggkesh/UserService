@@ -10,16 +10,19 @@ let users = JSON.parse(rawdata);
 app.get('/user/:id', (req, res) => {
 	const user = findUser(req.params.id)
 	if(user != null) {
-		res.send(users[foundIndex])
+		res.status(200)
+		res.send({
+			"name": user['name'],
+			"age": user['age'],
+			"email": user['email']
+		})
 	} else {
-		res.send("No Index found")
+		res.status(500)
+		res.send("No user found with given id")
 	}
 });
 
-app.use(express.static('public'))
-
-app.listen(port, () => console.log(`NAGP-quotes app listening on port ${port}!`))
-
+// Function used user with given userId 
 function findUser(userId) {
 	const userIdJsonKey = 'userId'
 
@@ -34,3 +37,7 @@ function findUser(userId) {
 
 	return null
 }
+
+app.use(express.static('public'))
+
+app.listen(port, () => console.log(`User-Service app listening on port ${port}!`))
